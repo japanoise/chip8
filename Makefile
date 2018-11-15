@@ -2,6 +2,9 @@
 CC=gcc
 CFLAGS=-c -Wall -I.
 LDFLAGS=-lm
+PREFIX=/usr/local
+BINDIR=${PREFIX}/bin
+INSTALL_PROGRAM=install -m 0755
 
 # Detect operating system:
 # More info: http://stackoverflow.com/q/714100
@@ -74,7 +77,7 @@ chip8-api.html: chip8.h d.awk
 README.html: README.md d.awk
 	awk -f d.awk -v Theme=7 -v Clean=1 $< > $@
 
-.PHONY : clean wipe
+.PHONY : clean wipe install
 
 wipe:
 	-rm -f *.o
@@ -83,3 +86,9 @@ clean: wipe
 	-rm -f c8asm chip8 c8dasm *.exe
 	-rm -f chip8-api.html README.html
 	-rm -f *.log *.bak
+
+install: chip8 c8asm c8dasm
+	mkdir -p ${BINDIR}
+	${INSTALL_PROGRAM} chip8 ${BINDIR}
+	${INSTALL_PROGRAM} c8asm ${BINDIR}
+	${INSTALL_PROGRAM} c8dasm ${BINDIR}
