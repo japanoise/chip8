@@ -29,10 +29,10 @@
 static int speed = 1200;
 
 /* Foreground color */
-static int fg_color = 0xAAAAFF;
+static int fg_color = FG_COLOR;
 
 /* Background color */
-static int bg_color = 0x000055;
+static int bg_color = BG_COLOR;
 
 /* Is the interpreter running? Set to 0 to enter "debug" mode */
 static int running = 1;
