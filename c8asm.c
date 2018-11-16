@@ -15,8 +15,6 @@ Hexadecimal constants can be written as
 
 #include "chip8.h"
 
-#define TOK_SIZE    64
-
 #define MAX_DEFS    256
 #define MAX_LOOKUP  256
 
@@ -73,7 +71,9 @@ static const char *inst_names[] = {
 static int sym;
 static int line;
 static const char *in, *last;
-static char token[TOK_SIZE];
+static int tok_size = 64;
+static int tok_len = 0;
+static char *token;
 
 /* Generated instructions before binary output */
 static struct {
@@ -168,11 +168,11 @@ static void add_definition(char *name, int type, char *value) {
 }
 
 static int nextsym() {
-    /* TODO: Ought to guard against buffer overruns in tok, but not today. */
     char *tok = token;
 
     sym = SYM_END;
     *tok = '\0';
+    tok_len = 0;
 
 scan_start:
     while(isspace(*in)) {
@@ -193,8 +193,14 @@ scan_start:
 
     if(isalpha(*in)) {
         int i;
-        while(isalnum(*in) || *in == '_')
+        while(isalnum(*in) || *in == '_') {
             *tok++ = tolower(*in++);
+            if (++tok_len == tok_size) {
+                tok_size *= 2;
+                token = realloc(token, tok_size);
+                tok = token + tok_len;
+            }
+        }
         *tok = '\0';
         for(i = 0; i < (sizeof inst_names)/(sizeof inst_names[0]); i++)
             if(!strcmp(inst_names[i], token)) {
@@ -328,6 +334,7 @@ static int get_word() {
 int c8_assemble(const char *text) {
     int i, j, regx = -1, regy = 0;
     in = text;
+    token = malloc(tok_size);
 
     if(c8_verbose) c8_message("Assembling...\n");
 

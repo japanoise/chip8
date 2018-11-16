@@ -1,0 +1,9 @@
+; This file doesn't actually do anything, but instead uses very, very long
+; identifiers/tokens to test the functionality.
+define shortident V0
+define BurritosInspirationPointForkBalloonSportsCardsintheSpokesAutomaticBiographiesKitesKungFuTrophiesBananaPeelsWeveSlippedOnandEggShellsWeveTippyToedOver V0
+define BurritosInspirationPointForkBalloonSportsCardsintheSpokesAutomaticBiographiesKitesKungFuTrophiesBananaPeelsWeveSlippedOnandEggShellsWeveTippyToedOvee V1
+	ld shortident, #FF
+	ld BurritosInspirationPointForkBalloonSportsCardsintheSpokesAutomaticBiographiesKitesKungFuTrophiesBananaPeelsWeveSlippedOnandEggShellsWeveTippyToedOver, 10
+loop:
+	jp loop
